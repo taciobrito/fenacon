@@ -1,0 +1,45 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3>
+            Usuários
+            <a href="{{ appurl }}usuarios_novo" class="btn btn-primary float-right">Adicionar</a>
+        </h3>
+    </div>
+</div>
+
+<hr>
+
+<div class="row">
+    <div class="col-md-12">
+        <input type="text" class="form-control" ng-model="pesquisa" placeholder="Digite o que deseja pesquisar">
+    </div>
+</div>
+
+<br>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 20px;">#</th>
+                    <th>Nome</th>
+                    <th>Login</th>
+                    <th style="width: 150px;"></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="usuario in usuarios">
+                    <td>{{ usuario.id }}</td>
+                    <td>{{ usuario.nome }}</td>
+                    <td>{{ usuario.login }}</td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-info">Editar</a>
+                        <a href="#" class="btn btn-sm btn-danger">Excluir</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

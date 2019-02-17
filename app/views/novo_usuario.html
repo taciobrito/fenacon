@@ -1,0 +1,42 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3>
+            Usuários / Novo
+            <a href="{{ appurl }}usuarios_novo" class="btn btn-primary float-right">Adicionar</a>
+        </h3>
+    </div>
+</div>
+
+<hr>
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <form name="usuarioForm">
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input id="nome" class="form-control" type="text" placeholder="Nome do usuário" ng-model="usuario.nome" name="nome" ng-required="true">
+                <span class="text-danger" ng-show="usuarioForm.nome.$error.required && usuarioForm.nome.$dirty">Por favor, preencha o nome</span>
+            </div>
+
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input id="login" class="form-control" type="text" placeholder="Login para acessar o sistema" ng-model="usuario.login" name="login" ng-required="true">
+                <span class="text-danger" ng-show="usuarioForm.login.$error.required && usuarioForm.login.$dirty">Por favor, preencha o login</span>
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input id="senha" class="form-control" type="password" placeholder="Senha para acessar o sistema" ng-model="usuario.senha" name="senha" ng-required="true">
+                <span class="text-danger" ng-show="usuarioForm.senha.$error.required && usuarioForm.senha.$dirty">Por favor, preencha o senha</span>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmar_senha">Confirmar senha</label>
+                <input id="confirmar_senha" class="form-control" type="password" placeholder="Repita a senha digitada" ng-model="usuario.confirmar_senha" name="confirmar_senha" ng-required="true">
+                <span class="text-danger" ng-show="usuarioForm.confirmar_senha.$error.required && usuarioForm.confirmar_senha.$dirty">Por favor, preencha a confirmação de senha</span>
+            </div>
+            
+            <button type="button" class="btn btn-primary btn-block" ng-click="addUsuario(usuario)" ng-disabled="usuarioForm.$invalid">Adicionar</button>
+        </form>
+    </div>
+</div>

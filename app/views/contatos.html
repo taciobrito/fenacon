@@ -1,0 +1,25 @@
+
+<h4>{{app}}</h4>
+<input type="text" class="form-control" ng-model="criterioDeBusca" placeholder="O que você está buscando?">
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th></th>
+            <th><a href="" ng-click="ordernarPor('nome')">Nome</a></th>
+            <th><a href="" ng-click="ordernarPor('telefone')">Telefone</a></th>
+            <th><a href="" ng-click="ordernarPor('operadora')">Operadora</a></th>
+            <th><a href="" ng-click="ordernarPor('data')">Data</a></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="contato in contatos | filter: criterioDeBusca | orderBy:criterioDeOrdenacao:direcaoDaOrdenacao" ng-class="{selecionado: contato.selecionado}">
+            <td><input type="checkbox" ng-model="contato.selecionado"></td>
+            <td>{{ contato.nome | name }}</td>
+            <td>{{ contato.telefone }}</td>
+            <td>{{ contato.operadora.nome }}</td>
+            <td>{{ contato.data | date:'dd/MM/yyyy' }}</td>
+            <td><div style="width: 20px;height: 20px;" ng-style="{'background-color':contato.cor}"></div></td>
+        </tr>
+    </tbody>
+</table>
