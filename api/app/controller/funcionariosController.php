@@ -10,8 +10,9 @@ class FuncionariosController extends Controller {
 	private $funcionario;
 
     function __construct() {
+        parent::__construct();
         $this->funcionario = new Funcionario();
-	}
+    }
 
     public function index()
     {
@@ -32,6 +33,7 @@ class FuncionariosController extends Controller {
                 'message' => 'Requisição inválida!',
             );
         }
+        // $this->dd($response, true);
 
         $this->response_json($response, $code);
     }
@@ -39,7 +41,10 @@ class FuncionariosController extends Controller {
     public function show ($id) {
         if ($this->method() == 'GET' && !empty($id))
         {
-            if (!empty($funcionario = $this->funcionario->retornaUm($id))) {
+            // $this->dd($this->funcionario->retornaFuncionario($id), true);
+            if (!empty($funcionario = $this->funcionario->retornaFuncionario($id))) {
+                $funcionario->endereco = json_decode($funcionario->endereco);
+                $funcionario->data_admissao = substr($funcionario->data_admissao, 8,2) . '/' . substr($funcionario->data_admissao, 5,2) .'/'. substr($funcionario->data_admissao, 0,4);
                 $code = 200;
                 $response = array(
                     'result' => $funcionario,
@@ -65,22 +70,25 @@ class FuncionariosController extends Controller {
     }
 
     public function store () {
-        if ($this->method() == 'POST' && empty($id)) {
-            $data = $this->validate($this->post());
+        $request_body = file_get_contents('php://input');
+        $post = json_decode($request_body);
+
+        // $this->dd($post, true);
+
+        // if ($this->method() == 'POST') {
+            $data = $this->validate($post);
             if ($data['code'] == 200) {
                 try {
-                    $dados = array(
-                        'nome' => $this->post('nome'),
-                        'cpf' => $this->post('cpf'),
-                        'endereco' => json_encode($this->post('endereco')),
-                        'carga_horaria' => $this->post('carga_horaria'),
-                        'data_admissao' => $this->post('data_admissao'),
-                        'situacao_id' => $this->post('situacao_id'),
-                        'cargo_id' => $this->post('cargo_id'),
-                    );
-                    if ($this->has_post('supervisor_id')) $dados['supervisor_id'] = $this->post('supervisor_id');
-
-                    if(!$funcionario = $this->funcionario->create($dados)) {
+                    if(!$funcionario = $this->funcionario->create(array(
+                        'nome' => $post->nome,
+                        'cpf' => $post->cpf,
+                        'endereco' => json_encode($post->endereco),
+                        'carga_horaria' => $post->carga_horaria,
+                        'data_admissao' => substr($post->data_admissao, 6,4) . '-' . substr($post->data_admissao, 3,2) .'-'. substr($post->data_admissao, 0,2),
+                        'situacao_id' => $post->situacao_id,
+                        'cargo_id' => $post->cargo_id,
+                        'supervisor_id' => $post->supervisor_id,
+                    ))) {
                         throw new \Exception("Error Processing Request", 1);
                     }
 
@@ -93,71 +101,66 @@ class FuncionariosController extends Controller {
                     $code = 400;
                     $response = array(
                         'result' => array(),
-                        'message' => 'Houve um erro ao criar novo registro!',
+                        'message' => 'Houve um erro ao criar novo registro! ' . $e->getMessage(),
                     );
                 }
             } else {
                 $code = $data['code'];
                 $response = $data['response'];
             }
-        } else {
-            $code = 400;
-            $response = array(
-                'result' => array(),
-                'message' => 'Requisição inválida!',
-            );
-        }
+        // } else {
+        //     $code = 400;
+        //     $response = array(
+        //         'result' => array(),
+        //         'message' => 'Requisição inválida!',
+        //     );
+        // }
 
         $this->response_json($response, $code);
     }
 
     public function update ($id) {
-        if ($this->method() == 'POST' && !empty($id)) {            
-            $data = $this->validate($this->post());
-            if ($data['code'] == 200) {
-                try {
-                    $dados = array(
-                        'nome' => $this->post('nome'),
-                        'cpf' => $this->post('cpf'),
-                        'endereco' => json_encode($this->post('endereco')),
-                        'carga_horaria' => $this->post('carga_horaria'),
-                        'data_admissao' => $this->post('data_admissao'),
-                        'situacao_id' => $this->post('situacao_id'),
-                        'cargo_id' => $this->post('cargo_id'),
-                    );
-                    if ($this->has_post('supervisor_id')) $dados['supervisor_id'] = $this->post('supervisor_id');
+        $request_body = file_get_contents('php://input');
+        $post = json_decode($request_body);
 
-                    $funcionario = $this->funcionario->update($dados, 'id = '.$id); 
+        // if ($this->method() == 'POST' && !empty($id)) {
+            try {
+                $funcionario = $this->funcionario->update(array(
+                    'nome' => $post->nome,
+                    'cpf' => $post->cpf,
+                    'endereco' => json_encode($post->endereco),
+                    'carga_horaria' => $post->carga_horaria,
+                    'data_admissao' => substr($post->data_admissao, 6,4) . '-' . substr($post->data_admissao, 3,2) .'-'. substr($post->data_admissao, 0,2),
+                    'situacao_id' => $post->situacao_id,
+                    'cargo_id' => $post->cargo_id,
+                    'supervisor_id' => $post->supervisor_id,
+                ), 'id = '.$id); 
 
-                    $code = 200;
-                    $response = array(
-                        'result' => $funcionario,
-                        'message' => 'Registro atualizado com sucesso!',
-                    );
-                } catch (\Exception $e) {
-                    $code = 400;
-                    $response = array(
-                        'result' => array(),
-                        'message' => 'Houve um erro ao atualizar registro!',
-                    );
-                }
-            } else {
-                $code = $data['code'];
-                $response = $data['response'];
+                $code = 200;
+                $response = array(
+                    'result' => array(),
+                    'message' => 'Registro atualizado com sucesso!',
+                );
+            } catch (\Exception $e) {
+                $code = 400;
+                $response = array(
+                    'result' => array(),
+                    'message' => 'Houve um erro ao atualizar registro!',
+                );
             }
-        } else {
-            $code = 400;
-            $response = array(
-                'result' => array(),
-                'message' => 'Requisição inválida!',
-            );
-        }
+        // } else {
+        //     $code = 400;
+        //     $response = array(
+        //         'result' => array(),
+        //         'message' => 'Requisição inválida!',
+        //     );
+        // }
 
         $this->response_json($response, $code);
     }
 
     public function destroy ($id) {
-        if ($this->method() == 'POST' && !empty($id)) {
+        // if ($this->method() == 'POST' && !empty($id)) {
             try {
                 $this->funcionario->delete('id = ' . $id); 
 
@@ -173,38 +176,39 @@ class FuncionariosController extends Controller {
                     'message' => 'Houve um erro ao remover registro!',
                 );
             } 
-        } else {
-            $code = 400;
-            $response = array(
-                'result' => array(),
-                'message' => 'Requisição inválida!',
-            );
-        }
+        // } else {
+        //     $code = 400;
+        //     $response = array(
+        //         'result' => array(),
+        //         'message' => 'Requisição inválida!',
+        //     );
+        // }
 
         $this->response_json($response, $code);
     }
 
     private function validate ($post) {
+        // $this->dd($post,true);
         $errors = array();
-        if (empty($post['nome']))
+        if (empty($post->nome))
             $errors[] = 'O campo nome é obrigatório.';
 
-        if (empty($post['cpf']))
+        if (empty($post->cpf))
             $errors[] = 'O campo cpf é obrigatório.';
 
-        if (empty($post['endereco']))
-            $errors[] = 'O campo endereço é obrigatório.';
+        if (empty($post->endereco))
+            $errors[] = 'O endereço é obrigatório.';
 
-        if (empty($post['carga_horaria']))
+        if (empty($post->carga_horaria))
             $errors[] = 'O campo carga horária é obrigatório.';
 
-        if (empty($post['data_admissao']))
+        if (empty($post->data_admissao))
             $errors[] = 'O campo data de admissão é obrigatório.';
 
-        if (empty($post['situacao_id']))
+        if (empty($post->situacao_id))
             $errors[] = 'O campo situação é obrigatório.';
 
-        if (empty($post['cargo_id']))
+        if (empty($post->cargo_id))
             $errors[] = 'O campo cargo é obrigatório.';
 
         if (count($errors) > 0) {
@@ -223,5 +227,6 @@ class FuncionariosController extends Controller {
 
         return array('code' => $code, 'response' => $response);
     }
+
 
 }

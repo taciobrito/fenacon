@@ -19,4 +19,12 @@ angular.module('appfenacon')
 		this.delete = function (id) {
 			return $http.post(`${config.apiurl}funcionarios/destroy/${id}`)
 		}
+
+		this.getCargos = function () {
+			return $http.get(`${config.apiurl}cargos`)
+		}
+
+		this.getSituacoes = function () {
+			return $http.get(`${config.apiurl}situacoes`)
+		}
 	})

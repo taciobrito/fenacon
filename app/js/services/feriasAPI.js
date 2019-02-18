@@ -1,7 +1,7 @@
 angular.module('appfenacon')
 	.service('feriasAPI', function ($http, config) {
-		this.all = function () {
-			return $http.get(`${config.apiurl}ferias`)
+		this.all = function (state) {
+			return $http.get(`${config.apiurl}ferias/index/${state}`)
 		}
 
 		this.find = function (id) {

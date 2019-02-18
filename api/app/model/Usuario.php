@@ -20,12 +20,12 @@
 
         public function retornaUsuarioESenha($login, $senha)
         {
-            return $this->query('SELECT id, nome, login FROM usuarios WHERE login = `'.$login.'` AND senha = `'.$senha.'`')->get();
+            return $this->query('SELECT id, nome, login FROM usuarios WHERE `login` = "'.$login.'" AND `senha` = "'.$senha.'"')->get();
         }
 
         public function retornaUsuario($login)
         {
-            return $this->query('SELECT id, nome, login FROM usuarios WHERE login = `'.$login.'`')->get();
+            return $this->query('SELECT id, nome, login FROM usuarios WHERE `login` = "'.$login.'"')->get();
         }
         
     }

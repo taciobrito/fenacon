@@ -11,7 +11,7 @@ class Model {
 
     public function __construct() {
         require (__DIR__ . '/../app/config/database.php');
-        $this->db = new \PDO('mysql:host=' . $db['hostname'] . ';dbname=' . $db['database'], $db['username'], $db['password']);
+        $this->db = new \PDO('mysql:host=' . $db['hostname'] . ';dbname=' . $db['database'] . ';charset=utf8', $db['username'], $db['password']);
     }
 
     public function create(Array $data) {
@@ -77,9 +77,13 @@ class Model {
     }
 
     public function update(Array $data, $where) {
+        // echo "<pre>";
         foreach ($data as $key => $value) {
-            $fields[] = "{$key} = '{$value}'";
+            $fields[] = (!empty($value)) ? "{$key} = '{$value}'" : "{$key} = null";
+            // print_r($key . '=>' . $value);
+            // echo "<br>";
         }
+        // die;
         $fields = implode(", ", $fields);
         $this->db->query("UPDATE {$this->_table} SET {$fields} WHERE {$where}");
         return $this->select(array('where' => $where))->get();

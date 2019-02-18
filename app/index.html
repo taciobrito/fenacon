@@ -8,13 +8,17 @@
     <title> Fenacon </title>
 
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/fontawesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/solid.min.css">
+    <link rel="stylesheet" type="text/css" href="css/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css" href="css/estilo.css">
 
     <!-- AngularJS AND Modules -->
     <script src="js/angular.min.js"></script>
     <script src="js/angular-locale_pt-br.js"></script>
     <script src="js/angular-route.js"></script>
-    <!-- <script src="js/angular-resource.js"></script> -->
+    <script src="js/ngMask.min.js"></script>
+    <script src="js/modules/pagination.js"></script>
 
     <!-- Start aplication -->
     <script src="js/main.js"></script>
@@ -23,9 +27,19 @@
     <script src="js/controllers/homeController.js"></script>
     <script src="js/controllers/menuController.js"></script>
     <script src="js/controllers/usuariosController.js"></script>
+    <script src="js/controllers/funcionariosController.js"></script>
+    <script src="js/controllers/feriasController.js"></script>
 
     <!-- Services -->
     <script src="js/services/usuariosAPI.js"></script>
+    <script src="js/services/funcionariosAPI.js"></script>
+    <script src="js/services/feriasAPI.js"></script>
+    <script src="js/services/externalAPI.js"></script>
+    <script src="js/services/simplePaginate.js"></script>
+
+    <!-- Filters -->
+    <script src="js/filters/range.js"></script>
+    <script src="js/filters/campos.js"></script>
 
     <!-- Configs -->
     <script src="js/config/config.js"></script>
@@ -33,21 +47,21 @@
     <!-- Routes -->
     <script src="js/config/routes.js"></script>
 
-    <base href="http://localhost/fenacon/app/">
+    <base href="/">
 </head>
 
 <body>
     <div ng-include="'views/menu.html'"></div>
 
-    <div class="container">
-        <div class="alert alert-success text-center" ng-if="error"><strong>{{ error }}</strong></div>
-        <div class="alert alert-danger text-center" ng-if="success"><strong>{{ success }}</strong></div>
-        
+    <div class="container">        
         <div ng-view style="padding: 20px 0;"></div>
     </div>
 
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/fontawesome.min.js"></script>
+    <script src="js/solid.min.js"></script>
+    <script src="js/sweetalert2.min.js"></script>
 </body>
 
 </html>

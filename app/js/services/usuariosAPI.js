@@ -16,6 +16,10 @@ angular.module('appfenacon')
 			return $http.post(`${config.apiurl}usuarios/update/${id}`, usuario)
 		}
 
+		this.updatePassword = function (id, trocaSenha) {
+			return $http.post(`${config.apiurl}usuarios/updatePassword/${id}`, trocaSenha)
+		}
+
 		this.delete = function (id) {
 			return $http.post(`${config.apiurl}usuarios/destroy/${id}`)
 		}

@@ -1,0 +1,96 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3>
+            Férias / A Tirar
+        </h3>
+    </div>
+</div>
+
+<hr>
+
+<div class="row">
+    <div class="col-md-12">
+        <input type="text" class="form-control" ng-model="pesquisa" placeholder="Digite o que deseja pesquisar">
+    </div>
+</div>
+<br>
+<div class="row">
+    <div class="col-md-4">
+        <label for="situacao_id">Situação</label>
+        <select name="situacao_id" id="situacao_id" class="form-control" ng-model="situacao_id" ng-options="situacao.id as situacao.descricao for situacao in situacoes" ng-change="filtros('situacao', cargo_id)">
+            <option value="">Selecione</option>
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <label for="cargo_id">Cargo</label>
+        <select name="cargo_id" id="cargo_id" class="form-control" ng-model="cargo_id" ng-options="cargo.id as cargo.descricao for cargo in cargos" ng-change="filtros('cargo', cargo_id)">
+            <option value="">Selecione</option>
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <label for="supervisor_id">Supervisor</label>
+        <select name="supervisor_id" id="supervisor_id" class="form-control" ng-model="supervisor_id" ng-options="supervisor.id as supervisor.nome for supervisor in supervisores" ng-change="filtros('supervisor', cargo_id)">
+            <option value="">Selecione</option>
+        </select>
+    </div>
+</div>
+
+<br>
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 50px;cursor: pointer;" ng-click="ordernarPor('id')"># <i class="fas fa-sort"></i></th>
+                    <th ng-click="ordernarPor('nome')" style="width: 200px;cursor: pointer;">nome <i class="fas fa-sort"></i></th>
+                    <th ng-click="ordernarPor('cpf')" style="cursor: pointer;">CPF <i class="fas fa-sort"></i></th>
+                    <th ng-click="ordernarPor('data_admissao')" style="cursor: pointer;">Adminissão <i class="fas fa-sort"></i></th>
+                    <!-- <th ng-click="ordernarPor('endereco')" style="cursor: pointer;">Endereço <i class="fas fa-sort"></i></th> -->
+                    <!-- <th ng-click="ordernarPor('carga_horaria')" style="cursor: pointer;">Carga Horária <i class="fas fa-sort"></i></th> -->
+                    <!-- <th ng-click="ordernarPor('situacao')" style="cursor: pointer;">Situação <i class="fas fa-sort"></i></th> -->
+                    <th ng-click="ordernarPor('cargo')" style="cursor: pointer;">Cargo <i class="fas fa-sort"></i></th>
+                    <!-- <th ng-click="ordernarPor('supervisor')" style="cursor: pointer;">Supervisor <i class="fas fa-sort"></i></th> -->
+                    <th ng-click="ordernarPor('tirar_em')" style="cursor: pointer;">Mês a tirar <i class="fas fa-sort"></i></th>
+                    <th style="width: 130px;">Inserir Férias</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="funcionario in paginateFeriasATirar.result.data | filter:pesquisa | orderBy:ordenacao:direcaoDaOrdenacao">
+                    <td>{{ funcionario.id }}</td>
+                    <td>{{ funcionario.nome }}</td>
+                    <td>{{ funcionario.cpf }}</td>
+                    <!-- <td>{{ funcionario.endereco }}</td> -->
+                    <!-- <td>{{ funcionario.carga_horaria }} horas</td> -->
+                    <td>{{ funcionario.data_admissao | date:'dd/MM/yyyy' }}</td>
+                    <!-- <td>{{ funcionario.situacao }}</td> -->
+                    <td>{{ funcionario.cargo }}</td>
+                    <!-- <td>{{ funcionario.supervisor }}</td> -->
+                    <td>{{ funcionario.tirar_em | date:'MM/yyyy' }}</td>
+                    <td>
+                        <!-- <a href="/ferias_edita/{{ funcionario.id }}" class="text-info"><i class="fas fa-edit"></i></a> -->
+                        <a href="/ferias_novo/{{ funcionario.id }}/{{ funcionario.periodo }}" class="text-primary" title="Inserir Férias"><i class="fas fa-arrow-right"></i></a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <ul class="pagination">
+            <li class="page-item">
+                <a href="" class="page-link" ng-click="paginateFeriasATirar.prev()"><span aria-hidden="true">&laquo;</span></a>
+            </li>
+            <li class="page-item" ng-repeat="page in [] | range:paginateFeriasATirar.totalPages">
+                <a href="" class="page-link" ng-click="paginateFeriasATirar.goToPage(page)">{{ (page+1) }}</a>
+            </li>
+            <li class="page-item">
+                <a href="" class="page-link" ng-click="paginateFeriasATirar.next()"><span aria-hidden="true">&raquo;</span></a>
+            </li>
+        </ul>
+
+        <p class="text-secondary">Total de <strong>{{paginateFeriasATirar.result.from}}</strong> a <strong>{{paginateFeriasATirar.result.to}}</strong> de <strong>{{paginateFeriasATirar.total}}</strong> registros</p>
+
+    </div>
+</div>

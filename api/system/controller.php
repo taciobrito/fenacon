@@ -7,9 +7,10 @@
     {
 
         function __construct () {
-            // header('Access-Control-Allow-Origin: *');
-            // // header('Access-Control-Allow-Methods: GET, POST');
-            // // header("Access-Control-Allow-Headers: X-Requested-With");
+            header("Access-Control-Allow-Origin: *");
+            header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+            header("Access-Control-Max-Age: 10000");
+            header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");
             // // header("Content-Type: Application/json");
         }
         
@@ -84,7 +85,7 @@
         }
 
         public function response_json($response, $code = 200)
-        {    
+        {
             http_response_code($code);
             echo json_encode($response);
         }
@@ -111,5 +112,22 @@
         {
             return $_SERVER['REQUEST_METHOD'];
         }
+
+        // public function dateToDb($date) {
+        //     if (!empty($date)) {
+        //         $date = explode("/", $date);
+        //         $date = $date[2] . '-' . $date[1] . '-' . $date[0];
+        //     } else
+        //         $date = '0000-00-00';
+        //     return $date;
+        // }
+
+        // public function dateFormat($date) {
+        //     if(!empty($date()) {
+        //         $date = explode("-", $date);
+        //         $date = $date[2] . '/' . $date[1] . '/' . $date[0];
+        //     } else $date = '';
+        //     return $date;
+        // }
 
     }

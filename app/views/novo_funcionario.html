@@ -1,0 +1,114 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3>
+            Funcionários / Novo
+            <a href="/funcionarios_novo" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Adicionar</a>
+        </h3>
+    </div>
+</div>
+
+<hr>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <form name="funcionarioForm">
+            <br>
+            <h4>Dados Cadastrais</h4>
+            <hr>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="nome">Nome</label>
+                    <input id="nome" class="form-control" type="text" placeholder="Nome do funcionário" ng-model="funcionario.nome" name="nome" ng-required="true">
+                    <span class="text-danger" ng-show="funcionarioForm.nome.$error.required && funcionarioForm.nome.$dirty">Por favor, preencha o nome</span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="cpf">CPF</label>
+                    <input id="cpf" class="form-control" type="text" placeholder="CPF do funcionário" mask="999.999.999-99" ng-model="funcionario.cpf" name="cpf" ng-required="true">
+                    <span class="text-danger" ng-show="funcionarioForm.cpf.$error.required && funcionarioForm.cpf.$dirty">Por favor, preencha o CPF</span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="carga_horaria">Carga Horária</label>
+                    <input id="carga_horaria" class="form-control" type="text" placeholder="Carga horária de trabalho" ng-model="funcionario.carga_horaria" name="carga_horaria" ng-required="true">
+                    <span class="text-danger" ng-show="funcionarioForm.carga_horaria.$error.required && funcionarioForm.carga_horaria.$dirty">Por favor, preencha a carga horária</span>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="data_admissao">Data de Admissão</label>
+                    <input id="data_admissao" class="form-control" type="text" mask="39/19/9999" placeholder="Data de Admissão na Empresa" ng-model="funcionario.data_admissao" name="data_admissao" ng-required="true">
+                    <span class="text-danger" ng-show="funcionarioForm.data_admissao.$error.required && funcionarioForm.data_admissao.$dirty">Por favor, preencha a data de admissão</span>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="situacao_id">Situação</label>
+                    <select name="situacao_id" id="situacao_id" class="form-control" ng-model="funcionario.situacao_id" ng-required="true" ng-options="situacao.id as situacao.descricao for situacao in situacoes">
+                        <option value="">Selecione</option>
+                    </select>
+                    <span class="text-danger" ng-show="funcionarioForm.situacao_id.$error.required && funcionarioForm.situacao_id.$dirty">Por favor, selecione a situação</span>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="cargo_id">Cargo</label>
+                    <select name="cargo_id" id="cargo_id" class="form-control" ng-model="funcionario.cargo_id" ng-required="true" ng-options="cargo.id as cargo.descricao for cargo in cargos" ng-change="supervisorCargo(funcionario.cargo_id)">
+                        <option value="">Selecione</option>
+                    </select>
+                    <span class="text-danger" ng-show="funcionarioForm.cargo_id.$error.required && funcionarioForm.cargo_id.$dirty">Por favor, selecione o cargo</span>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="supervisor_id">Supervisor</label>
+                    <select name="supervisor_id" id="supervisor_id" class="form-control" ng-model="funcionario.supervisor_id" ng-required="funcionario.cargo_id != 4" ng-disabled="funcionario.cargo_id == 4" ng-options="supervisor.id as supervisor.nome for supervisor in supervisores">
+                        <option value="">Selecione</option>
+                    </select>
+                    <span class="text-danger" ng-show="funcionarioForm.supervisor_id.$error.required && funcionarioForm.supervisor_id.$dirty">Por favor, selecione o supervisor</span>
+                </div>
+            </div>
+
+            <br>
+            <h4>Endereço</h4>
+            <hr>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label for="cep">CEP</label>
+                    <input id="cep" class="form-control" type="text" placeholder="CEP" ng-model="funcionario.endereco.cep" ng-required="true" name="cep" ng-blur="getCep(funcionario.endereco.cep)">
+                    <span class="text-danger" ng-show="funcionarioForm.cep.$error.required && funcionarioForm.cep.$dirty">Por favor, preencha o CEP</span>
+                </div>
+
+                <div class="form-group col-md-8">
+                    <label for="logradouro">Logradouro</label>
+                    <input id="logradouro" class="form-control" type="text" placeholder="logradouro" ng-model="funcionario.endereco.logradouro" ng-required="true" name="Logradouro">
+                    <span class="text-danger" ng-show="funcionarioForm.Logradouro.$error.required && funcionarioForm.Logradouro.$dirty">Por favor, preencha o Logradouro</span>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="bairro">Bairro</label>
+                    <input id="bairro" class="form-control" type="text" placeholder="Bairro" ng-model="funcionario.endereco.bairro" ng-required="true" name="bairro">
+                    <span class="text-danger" ng-show="funcionarioForm.bairro.$error.required && funcionarioForm.bairro.$dirty">Por favor, preencha o Bairro</span>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="localidade">Cidade</label>
+                    <input id="localidade" class="form-control" type="text" placeholder="Cidade" ng-model="funcionario.endereco.localidade" ng-required="true" name="localidade">
+                    <span class="text-danger" ng-show="funcionarioForm.localidade.$error.required && funcionarioForm.localidade.$dirty">Por favor, preencha a cidade</span>
+                </div>
+
+                <div class="form-group col-md-4">
+                    <label for="uf">UF</label>
+                    <input id="uf" class="form-control" type="text" placeholder="UF" ng-model="funcionario.endereco.uf" ng-required="true" name="uf" ng-maxlength="2" ng-minlength="2">
+                    <span class="text-danger" ng-show="funcionarioForm.uf.$error.required && funcionarioForm.uf.$dirty">Por favor, preencha a UF</span>
+                    <span class="text-danger" ng-show="(funcionarioForm.uf.$error.maxlength || funcionarioForm.uf.$error.minlength) && funcionarioForm.uf.$dirty">A UF deve ter duas letras</span>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <label for="complemento">Complemento</label>
+                    <input id="complemento" class="form-control" type="text" placeholder="Complemento" ng-model="funcionario.endereco.complemento" name="complemento">
+                </div>
+            </div>
+            
+            <button type="button" class="btn btn-success btn-block" ng-click="addFuncionario(funcionario)" ng-disabled="funcionarioForm.$invalid">Adicionar</button>
+        </form>
+    </div>
+</div>

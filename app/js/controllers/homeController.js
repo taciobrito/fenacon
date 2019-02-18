@@ -1,6 +1,4 @@
 angular.module('appfenacon')
-    .controller('homeController', function ($scope, config) {
+    .controller('homeController', function ($scope) {
         $scope.titulo = 'APP Fenacon'
-
-        $scope.appurl = config.appurl
     })

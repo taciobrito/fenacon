@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3>
+            Férias / Cadastrar
+        </h3>
+    </div>
+</div>
+
+<hr>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h4>Funcionário</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th style="width: 200px;">Nome</th>
+                    <th style="width: 140px;">CPF</th>
+                    <th>Adminissão</th>
+                    <th>Cargo</th>
+                    <th>Supervisor</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ funcionario.nome }}</td>
+                    <td>{{ funcionario.cpf }}</td>
+                    <td>{{ funcionario.data_admissao | date:'dd/MM/yyyy' }}</td>
+                    <td>{{ funcionario.cargo }}</td>
+                    <td>{{ funcionario.supervisor }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 offset-md-2">
+        <h4>Período das Férias</h4>
+        <form name="feriasForm">
+            <input type="hidden" ng-model="ferias.funcionario_id" />
+            <input type="hidden" ng-model="ferias.periodo" />
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="dt_inicio">Data de Início</label>
+                    <input id="dt_inicio" class="form-control" type="text" mask="39/19/9999" placeholder="Data de Início das Férias" ng-model="ferias.dt_inicio" name="dt_inicio" ng-required="true">
+                    <span class="text-danger" ng-show="feriasForm.dt_inicio.$error.required && feriasForm.dt_inicio.$dirty">Por favor, preencha a data de início das férias</span>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="dt_fim">Data de Fim</label>
+                    <input id="dt_fim" class="form-control" type="text" mask="39/19/9999" placeholder="Data de Fim das Férias" ng-model="ferias.dt_fim" name="dt_fim" ng-required="true">
+                    <span class="text-danger" ng-show="feriasForm.dt_fim.$error.required && feriasForm.dt_fim.$dirty">Por favor, preencha a data de fim das férias</span>
+                </div>
+            </div>
+            
+            <button type="button" class="btn btn-success btn-block" ng-click="addFerias(ferias)" ng-disabled="feriasForm.$invalid">Adicionar</button>
+        </form>
+    </div>
+</div>

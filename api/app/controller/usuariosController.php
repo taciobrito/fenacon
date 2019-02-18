@@ -66,18 +66,21 @@ class UsuariosController extends Controller {
     }
 
     public function store () {
-        if ($this->method() == 'POST') {
-            $data = $this->validate($this->post());
+        $request_body = file_get_contents('php://input');
+        $post = json_decode($request_body);
+
+        // if ($this->method() == 'POST') {
+            $data = $this->validate($post);
             if ($data['code'] == 200) {
                 try {
-                    if (count($this->usuario->retornaUsuario($this->post('login'))) > 0) {
+                    if ($this->usuario->retornaUsuario($post->login)) {
                         throw new \Exception('O login informado já existe', 1);
                     }
 
                     if(!$usuario = $this->usuario->create(array(
-                        'nome' => $this->post('nome'),
-                        'login' => $this->post('login'), 
-                        'senha' => password_hash($this->post('senha'), PASSWORD_DEFAULT), 
+                        'nome' => $post->nome,
+                        'login' => $post->login, 
+                        'senha' => password_hash($post->senha, PASSWORD_DEFAULT), 
                     ))) {
                         throw new \Exception("Error Processing Request", 1);
                     }
@@ -98,28 +101,31 @@ class UsuariosController extends Controller {
                 $code = $data['code'];
                 $response = $data['response'];
             }
-        } else {
-            $code = 400;
-            $response = array(
-                'result' => array(),
-                'message' => 'Requisição inválida!',
-            );
-        }
+        // } else {
+        //     $code = 400;
+        //     $response = array(
+        //         'result' => array(),
+        //         'message' => 'Requisição inválida!',
+        //     );
+        // }
 
         $this->response_json($response, $code);
     }
 
     public function update ($id) {
-        if ($this->method() == 'POST' && !empty($id)) {            
+        $request_body = file_get_contents('php://input');
+        $post = json_decode($request_body);
+
+        // if ($this->method() == 'POST' && !empty($id)) {
             try {
                 $usuario = $this->usuario->update(array(
-                    'nome' => $this->post('nome'),
-                    'login' => $this->post('login')
+                    'nome' => $post->nome,
+                    'login' => $post->login
                 ), 'id = '.$id); 
 
                 $code = 200;
                 $response = array(
-                    'result' => $usuario,
+                    'result' => array(),
                     'message' => 'Registro atualizado com sucesso!',
                 );
             } catch (\Exception $e) {
@@ -129,19 +135,69 @@ class UsuariosController extends Controller {
                     'message' => 'Houve um erro ao atualizar registro!',
                 );
             }
-        } else {
-            $code = 400;
+        // } else {
+        //     $code = 400;
+        //     $response = array(
+        //         'result' => array(),
+        //         'message' => 'Requisição inválida!',
+        //     );
+        // }
+
+        $this->response_json($response, $code);
+    }
+
+    public function updatePassword ($id) {
+        $request_body = file_get_contents('php://input');
+        $post = json_decode($request_body);
+
+        $errors = array();
+        if (empty($post->senha))
+            $errors[] = 'O campo senha é obrigatório.';
+        if (empty($post->confirmar_senha))
+            $errors[] = 'O campo confirmar senha é obrigatório.';
+        if (!empty($post->senha) && !empty($post->confirmar_senha))
+            if ($post->confirmar_senha != $post->senha)
+                $errors[] = 'O campo confirmar senha deve ser igual a senha.';
+
+        if (count($errors) > 0) {
+            $code = 422;
             $response = array(
-                'result' => array(),
-                'message' => 'Requisição inválida!',
+                'errors' => $errors,
+                'message' => 'Há campos incorretos no preenchimento do formulário!',
             );
+        } else {
+        // if ($this->method() == 'POST' && !empty($id)) {
+            try {
+                $usuario = $this->usuario->update(array(
+                    'senha' => password_hash($post->senha, PASSWORD_DEFAULT),
+                ), 'id = '.$id); 
+
+                $code = 200;
+                $response = array(
+                    'result' => array(),
+                    'message' => 'Senha atualizada com sucesso!',
+                );
+            } catch (\Exception $e) {
+                $code = 400;
+                $response = array(
+                    'result' => array(),
+                    'message' => 'Houve um erro ao atualizar a senha!',
+                );
+            }
         }
+        // } else {
+        //     $code = 400;
+        //     $response = array(
+        //         'result' => array(),
+        //         'message' => 'Requisição inválida!',
+        //     );
+        // }
 
         $this->response_json($response, $code);
     }
 
     public function destroy ($id) {
-        if ($this->method() == 'POST' && !empty($id)) {
+        // if ($this->method() == 'POST' && !empty($id)) {
             try {
                 $this->usuario->delete('id = ' . $id); 
 
@@ -157,33 +213,34 @@ class UsuariosController extends Controller {
                     'message' => 'Houve um erro ao remover registro!',
                 );
             } 
-        } else {
-            $code = 400;
-            $response = array(
-                'result' => array(),
-                'message' => 'Requisição inválida!',
-            );
-        }
+        // } else {
+        //     $code = 400;
+        //     $response = array(
+        //         'result' => array(),
+        //         'message' => 'Requisição inválida!',
+        //     );
+        // }
 
         $this->response_json($response, $code);
     }
 
     private function validate ($post) {
+        // $this->dd($post,true);
         $errors = array();
-        if (empty($post['nome']))
+        if (empty($post->nome))
             $errors[] = 'O campo nome é obrigatório.';
 
-        if (empty($post['login']))
+        if (empty($post->login))
             $errors[] = 'O campo login é obrigatório.';
 
-        if (empty($post['senha']))
+        if (empty($post->senha))
             $errors[] = 'O campo senha é obrigatório.';
 
-        if (empty($post['confirmar_senha']))
+        if (empty($post->confirmar_senha))
             $errors[] = 'O campo confirmar senha é obrigatório.';
 
-        if (!empty($post['senha']) && !empty($post['confirmar_senha']))
-            if ($post['confirmar_senha'] != $post['senha'])
+        if (!empty($post->senha) && !empty($post->confirmar_senha))
+            if ($post->confirmar_senha != $post->senha)
                 $errors[] = 'O campo confirmar senha deve ser igual a senha.';
 
         if (count($errors) > 0) {
@@ -201,12 +258,6 @@ class UsuariosController extends Controller {
         }
 
         return array('code' => $code, 'response' => $response);
-    }
-
-    public function response_json($response, $code = 200)
-    {    
-        http_response_code($code);
-        echo json_encode($response);
     }
 
 }

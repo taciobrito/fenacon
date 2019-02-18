@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-md-12">
+        <h3>
+            Usuários / Editar
+            <a href="/usuarios_novo" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Adicionar</a>
+        </h3>
+    </div>
+</div>
+
+<hr>
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <form name="usuarioForm">
+            <input type="hidden" ng-model="usuario.id">
+
+            <div class="form-group">
+                <label for="nome">Nome</label>
+                <input id="nome" class="form-control" type="text" placeholder="Nome do usuário" ng-model="usuario.nome" name="nome" ng-required="true">
+                <span class="text-danger" ng-show="usuarioForm.nome.$error.required && usuarioForm.nome.$dirty">Por favor, preencha o nome</span>
+            </div>
+
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input id="login" class="form-control" type="text" placeholder="Login para acessar o sistema" ng-model="usuario.login" name="login" ng-required="true">
+                <span class="text-danger" ng-show="usuarioForm.login.$error.required && usuarioForm.login.$dirty">Por favor, preencha o login</span>
+            </div>
+            
+            <button type="button" class="btn btn-success btn-block" ng-click="editUsuario(usuario)" ng-disabled="usuarioForm.$invalid">Salvar</button>
+        </form>
+
+        <hr>
+
+        <h4 class="text-center">Trocar Senha</h4>
+
+        <form name="usuarioFormSenha">
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input id="senha" class="form-control" type="password" placeholder="Senha para acessar o sistema" ng-model="trocaSenha.senha" name="senha" ng-required="true">
+                <span class="text-danger" ng-show="usuarioFormSenha.senha.$error.required && usuarioFormSenha.senha.$dirty">Por favor, preencha o senha</span>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmar_senha">Confirmar senha</label>
+                <input id="confirmar_senha" class="form-control" type="password" placeholder="Repita a senha digitada" ng-model="trocaSenha.confirmar_senha" name="confirmar_senha" ng-required="true">
+                <span class="text-danger" ng-show="usuarioFormSenha.confirmar_senha.$error.required && usuarioFormSenha.confirmar_senha.$dirty">Por favor, preencha a confirmação de senha</span>
+            </div>
+            
+            <button type="button" class="btn btn-primary btn-block" ng-click="editSenha(usuario.id, trocaSenha)" ng-disabled="usuarioFormSenha.$invalid">Alterar Senha</button>
+        </form>
+    </div>
+</div>

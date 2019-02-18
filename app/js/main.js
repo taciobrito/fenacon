@@ -1,1 +1,1 @@
-angular.module('appfenacon', ['ngRoute'])
+angular.module('appfenacon', ['ngRoute', 'Pagination', 'ngMask'])

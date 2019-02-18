@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <h3>
             Usuários / Novo
-            <a href="{{ appurl }}usuarios_novo" class="btn btn-primary float-right">Adicionar</a>
+            <a href="/usuarios_novo" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Adicionar</a>
         </h3>
     </div>
 </div>
@@ -36,7 +36,7 @@
                 <span class="text-danger" ng-show="usuarioForm.confirmar_senha.$error.required && usuarioForm.confirmar_senha.$dirty">Por favor, preencha a confirmação de senha</span>
             </div>
             
-            <button type="button" class="btn btn-primary btn-block" ng-click="addUsuario(usuario)" ng-disabled="usuarioForm.$invalid">Adicionar</button>
+            <button type="button" class="btn btn-success btn-block" ng-click="addUsuario(usuario)" ng-disabled="usuarioForm.$invalid">Adicionar</button>
         </form>
     </div>
 </div>

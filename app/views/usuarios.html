@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <h3>
             Usuários
-            <a href="{{ appurl }}usuarios_novo" class="btn btn-primary float-right">Adicionar</a>
+            <a href="/usuarios_novo" class="btn btn-primary float-right"><i class="fas fa-plus"></i> Adicionar</a>
         </h3>
     </div>
 </div>
@@ -22,24 +22,39 @@
         <table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th style="width: 20px;">#</th>
-                    <th>Nome</th>
-                    <th>Login</th>
-                    <th style="width: 150px;"></th>
+                    <th style="width: 50px;cursor: pointer;" ng-click="ordernarPor('id')"># <i class="fas fa-sort"></i></th>
+                    <th ng-click="ordernarPor('nome')" style="cursor: pointer;">Nome <i class="fas fa-sort"></i></th>
+                    <th ng-click="ordernarPor('login')" style="cursor: pointer;">Login <i class="fas fa-sort"></i></th>
+                    <th style="width: 70px;"></th>
                 </tr>
             </thead>
 
             <tbody>
-                <tr ng-repeat="usuario in usuarios">
+                <tr ng-repeat="usuario in paginateUsuarios.result.data | filter:pesquisa | orderBy:ordenacao:direcaoDaOrdenacao">
                     <td>{{ usuario.id }}</td>
                     <td>{{ usuario.nome }}</td>
                     <td>{{ usuario.login }}</td>
                     <td>
-                        <a href="#" class="btn btn-sm btn-info">Editar</a>
-                        <a href="#" class="btn btn-sm btn-danger">Excluir</a>
+                        <a href="/usuarios_edita/{{ usuario.id }}" class="text-info"><i class="fas fa-edit"></i></a>
+                        <a href="" ng-click="removeUsuario(usuario.id)" class="text-danger"><i class="fas fa-times"></i></a>
                     </td>
                 </tr>
             </tbody>
         </table>
+
+        <ul class="pagination">
+            <li class="page-item">
+                <a href="" class="page-link" ng-click="paginateUsuarios.prev()"><span aria-hidden="true">&laquo;</span></a>
+            </li>
+            <li class="page-item" ng-repeat="page in [] | range:paginateUsuarios.totalPages">
+                <a href="" class="page-link" ng-click="paginateUsuarios.goToPage(page)">{{ (page+1) }}</a>
+            </li>
+            <li class="page-item">
+                <a href="" class="page-link" ng-click="paginateUsuarios.next()"><span aria-hidden="true">&raquo;</span></a>
+            </li>
+        </ul>
+
+        <p class="text-secondary">Total de <strong>{{paginateUsuarios.result.from}}</strong> a <strong>{{paginateUsuarios.result.to}}</strong> de <strong>{{paginateUsuarios.total}}</strong> registros</p>
+
     </div>
 </div>
